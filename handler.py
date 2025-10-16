@@ -3,7 +3,7 @@ import torch
 from PIL import Image
 import io
 import base64
-from transformers import AutoProcessor, AutoModelForVision2Seq
+from transformers import Blip2Processor, Blip2ForConditionalGeneration
 
 # Variabile globale per il modello
 model = None
@@ -20,15 +20,15 @@ def load_model():
     device = "cuda" if torch.cuda.is_available() else "cpu"
     print(f"Usando device: {device}")
     
-    # Usa BLIP-2 che è non censurato
+    # Usa BLIP-2 che è non censurato e performante
     model_name = "Salesforce/blip2-opt-2.7b"
     
-    processor = AutoProcessor.from_pretrained(model_name)
-    model = AutoModelForVision2Seq.from_pretrained(
+    processor = Blip2Processor.from_pretrained(model_name)
+    model = Blip2ForConditionalGeneration.from_pretrained(
         model_name,
-        torch_dtype=torch.float16 if device == "cuda" else torch.float32
+        torch_dtype=torch.float16 if device == "cuda" else torch.float32,
+        device_map="auto"
     )
-    model.to(device)
     model.eval()
     
     print("Modello caricato con successo!")
