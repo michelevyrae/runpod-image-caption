@@ -2,4 +2,5 @@ runpod==1.6.2
 transformers==4.44.2
 Pillow==10.4.0
 accelerate==0.33.0
-sentencepiece==0.2.0
+tokenizers==0.19.1
+bitsandbytes==0.43.1
