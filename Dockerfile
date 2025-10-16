@@ -16,14 +16,5 @@ RUN pip install --no-cache-dir -U pip && \
 
 COPY handler.py /app/handler.py
 
-# Pre-scarica i pesi per ridurre il cold start
-RUN python - << 'PY'
-from transformers import AutoProcessor, AutoModelForCausalLM
-m = "Qwen/Qwen2-VL-2B-Instruct"
-AutoProcessor.from_pretrained(m)
-AutoModelForCausalLM.from_pretrained(m, torch_dtype="auto")
-print("Qwen2-VL-2B cached.")
-PY
-
-# Avvio worker serverless
+# Avvio serverless
 CMD ["python", "-c", "import handler, runpod; runpod.serverless.start({'handler': handler.handler})"]
