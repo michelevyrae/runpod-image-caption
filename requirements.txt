@@ -1,0 +1,9 @@
+transformers>=4.45.0
+accelerate
+Pillow
+runpod
+requests
+sentencepiece
+safetensors
+timm
+einops
