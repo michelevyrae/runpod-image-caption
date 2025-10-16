@@ -11,7 +11,7 @@ for p in ["/root/.cache/huggingface", "/root/.cache/torch", "/opt/conda/pkgs"]:
     shutil.rmtree(p, ignore_errors=True)
 os.makedirs("/app/hf", exist_ok=True)
 
-MODEL_ID = "Qwen/Qwen2-VL-2B-Instruct"  # se ancora spazio insufficiente, useremo 1.5B
+MODEL_ID = "Qwen/Qwen2-VL-1.5B-Instruct"  # se ancora spazio insufficiente, useremo 1.5B
 
 processor = AutoProcessor.from_pretrained(MODEL_ID, trust_remote_code=True)
 model = AutoModelForVision2Seq.from_pretrained(
