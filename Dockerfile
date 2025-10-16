@@ -12,9 +12,13 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 COPY requirements.txt /app/requirements.txt
 RUN pip install --no-cache-dir -U pip && \
-    pip install --no-cache-dir -r /app/requirements.txt
+    pip install --no-cache-dir -r /app/requirements.txt && \
+    (conda clean -afy || true) && pip cache purge && \
+    rm -rf /root/.cache /opt/conda/pkgs
+
+# Cache directory con spazio
+RUN mkdir -p /app/hf
 
 COPY handler.py /app/handler.py
 
-# Avvio serverless
 CMD ["python", "-c", "import handler, runpod; runpod.serverless.start({'handler': handler.handler})"]
