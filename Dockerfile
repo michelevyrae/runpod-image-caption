@@ -1,24 +1,15 @@
-FROM pytorch/pytorch:2.3.0-cuda12.1-cudnn8-runtime
+# Usa l'immagine base di RunPod con CUDA
+FROM runpod/pytorch:2.1.0-py3.10-cuda11.8.0-devel-ubuntu22.04
 
-ENV DEBIAN_FRONTEND=noninteractive \
-    HF_HOME=/app/hf \
-    TRANSFORMERS_CACHE=/app/hf
-
+# Imposta la directory di lavoro
 WORKDIR /app
 
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    git curl wget ca-certificates && \
-    rm -rf /var/lib/apt/lists/*
+# Copia i file necessari
+COPY requirements.txt .
+COPY handler.py .
 
-COPY requirements.txt /app/requirements.txt
-RUN pip install --no-cache-dir -U pip && \
-    pip install --no-cache-dir -r /app/requirements.txt && \
-    (conda clean -afy || true) && pip cache purge && \
-    rm -rf /root/.cache /opt/conda/pkgs
+# Installa le dipendenze
+RUN pip install --no-cache-dir -r requirements.txt
 
-# Cache directory con spazio
-RUN mkdir -p /app/hf
-
-COPY handler.py /app/handler.py
-
-CMD ["python", "-c", "import handler, runpod; runpod.serverless.start({'handler': handler.handler})"]
+# Comando per avviare l'handler
+CMD ["python", "-u", "handler.py"]
